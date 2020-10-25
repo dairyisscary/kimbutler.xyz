@@ -1,0 +1,150 @@
+version: 2.1
+
+commands:
+  checkout_monorepo:
+    description: Checkout the git mono repo with a standard root
+    steps:
+      - checkout:
+          path: /home/circleci/kimbutler.xyz
+
+  attach_made_workspace:
+    description: Attach workspace generated files from another job
+    steps:
+      - attach_workspace:
+          at: /home/circleci/kimbutler.xyz
+
+executors:
+  default_grace_node_env:
+    docker:
+      - image: circleci/node:14.14.0
+    working_directory: /home/circleci/kimbutler.xyz/domains/grace
+
+  default_terraform_env:
+    docker:
+      - image: dairyisscary/terraform:0.13.5-kimbutlerxyz
+    working_directory: /home/circleci/kimbutler.xyz
+
+  default_awscli_env:
+    docker:
+      - image: dairyisscary/awscli:1.14.36
+    working_directory: /home/circleci/kimbutler.xyz
+
+jobs:
+  fmt_infrastructure:
+    executor: default_terraform_env
+    steps:
+      - checkout_monorepo
+      - run:
+          name: Formatting Terraform
+          command: terraform fmt -recursive -check .
+
+  deploy_infrastructure:
+    executor: default_terraform_env
+    steps:
+      - checkout_monorepo
+      - run:
+          name: Initing Terraform
+          command: |
+            cd infra && terraform init
+      - run:
+          name: Forming Infrastructure
+          command: |
+            cd infra && \
+            terraform apply -auto-approve && \
+            mkdir -p output
+            terraform output -json > output/terraform.json
+      - persist_to_workspace:
+          root: .
+          paths:
+            - infra/output
+
+  build_grace_working_directory:
+    executor: default_grace_node_env
+    steps:
+      - checkout_monorepo
+      - restore_cache:
+          name: Restoring node_modules
+          keys:
+            - grace-node_modules-node14-{{ checksum "yarn.lock" }}
+            - grace-node_modules-node14-
+      - run:
+          name: Installing NPM Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Caching node_modules
+          key: grace-node_modules-node14-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: "../../"
+          paths:
+            - domains/grace
+
+  lint_grace:
+    executor: default_grace_node_env
+    steps:
+      - attach_made_workspace
+      - run:
+          name: Checking Formatting
+          command: yarn run lint
+
+  build_grace_static_html:
+    executor: default_grace_node_env
+    steps:
+      - attach_made_workspace
+      - run:
+          name: Building
+          command: rm -rf .cache public && yarn run build
+          env:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: "../../"
+          paths:
+            - domains/grace/public
+
+  deploy_grace_to_aws:
+    executor: default_awscli_env
+    steps:
+      - attach_made_workspace
+      - run:
+          name: Uploading to S3 Bucket
+          command: |
+            cd /home/circleci/kimbutler.xyz/domains/grace
+            BUCKET_NAME=$(cat ../../infra/output/terraform.json | jq '.grace_static_bucket_name.value' -r) bash bin/upload-to-s3.sh
+      - run:
+          name: Invalidating Cloudfront
+          command: |
+            aws cloudfront create-invalidation \
+              --distribution-id $(\
+                 cat infra/output/terraform.json | \
+                 jq '.grace_cdn_id.value' -r \
+              ) \
+              --paths '/*'
+
+workflows:
+  version: 2
+  "Check and Deploy":
+    jobs:
+      - fmt_infrastructure
+      - deploy_infrastructure:
+          requires:
+            - fmt_infrastructure
+          filters:
+            branches:
+              only: production
+
+      - build_grace_working_directory
+      - lint_grace:
+          requires:
+            - build_grace_working_directory
+      - build_grace_static_html:
+          requires:
+            - build_grace_working_directory
+      - deploy_grace_to_aws:
+          requires:
+            - lint_grace
+            - build_grace_static_html
+            - deploy_infrastructure
+          filters:
+            branches:
+              only: production
