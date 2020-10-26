@@ -121,7 +121,7 @@ function Index() {
       <Content>
         <H1>Grace Kim-Butler</H1>
         <TagLine>Anthropologist of Art&nbsp;and&nbsp;Science</TagLine>
-        <PaddedTagLine>Postdoctoral Fellow, Getty Research Institute</PaddedTagLine>
+        <PaddedTagLine>ACLS Postdoctoral Fellow at Vanderbilt University</PaddedTagLine>
       </Content>
       <Navigation>
         <NavLink to="/about/">About</NavLink>

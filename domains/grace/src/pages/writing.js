@@ -12,6 +12,15 @@ function Writing() {
         <title>Writing | Grace Kim-Butler</title>
       </Helmet>
       <h3>
+        <a href="https://www.getty.edu/about/whatwedo/getty_magazine/gettymag_spring2020.pdf">
+          “Cultures on Culture: Biofilm, Conservation, and the Interface of Art and Environment”
+        </a>
+      </h3>
+      <p>
+        While a 2019-20 “Art and Ecology” postdoctoral fellow at the Getty Research Institute, I
+        wrote a brief description of my project in <em>The Getty Magazine</em>.
+      </p>
+      <h3>
         <a href="https://www.tandfonline.com/eprint/a4XxE3yTrtvwDtCUekA8/full">
           “Cigarettes, Saliva, Art: Laboratory Expertise in Florence, Italy”
         </a>
