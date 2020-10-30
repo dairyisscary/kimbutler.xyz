@@ -5,7 +5,7 @@ function getFathomScriptTags() {
     <script
       key="fathom-remote-js"
       type="text/javascript"
-      src="https://cdn.usefathom.com/script.js"
+      src="https://toucan.kimbutler.xyz/script.js"
       spa="auto"
       data-site="SULYZTWP"
       defer
