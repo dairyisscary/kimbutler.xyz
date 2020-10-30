@@ -10,14 +10,14 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^2.24.85",
+    "gatsby": "^2.24.91",
     "gatsby-plugin-favicon": "^3.1.6",
     "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sharp": "^2.6.43",
     "gatsby-plugin-styletron": "^5.0.11",
-    "gatsby-remark-images": "^3.3.39",
-    "gatsby-source-filesystem": "^2.3.35",
-    "gatsby-transformer-remark": "^2.8.46",
+    "gatsby-remark-images": "^3.3.40",
+    "gatsby-source-filesystem": "^2.3.37",
+    "gatsby-transformer-remark": "^2.8.47",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -26,12 +26,12 @@
     "styletron-react": "^5.2.7"
   },
   "devDependencies": {
-    "eslint": "^7.12.0",
+    "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^6.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "prettier": "^2.1.2"
