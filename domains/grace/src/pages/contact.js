@@ -18,14 +18,26 @@ const Field = styled("div", {
 const TextAreaContainer = styled("div", {
   margin: "1rem 0 1.5rem",
 });
+const Hidden = styled("div", { display: "none" });
+const SentAlert = styled("header", {
+  marginBottom: "1.5rem",
+  display: "flex",
+  alignItems: "center",
+  color: "#A7F3D0",
+  border: "1px solid #A7F3D0",
+  borderRadius: "4px",
+  padding: "1rem",
+});
 
 function Contact() {
+  const isSent = typeof window !== "undefined" && /sent=true/.test(window.location.search);
   return (
     <Page title="Contact">
       <Helmet>
         <title>Contact | Grace Kim-Butler</title>
       </Helmet>
-      <form action="https://formspree.io/grace.jimin.kim@gmail.com" method="POST">
+      <form action="https://app.99inbound.com/api/e/ExU0a1d5" method="POST">
+        {isSent && <SentAlert>Thank you! I will get back to you as soon as I can.</SentAlert>}
         <Fields>
           <Field>
             <FieldLabel htmlFor="contactName">Name</FieldLabel>
@@ -40,6 +52,15 @@ function Contact() {
           <FieldLabel htmlFor="contactMessage">Message</FieldLabel>
           <TextArea name="message" id="contactMessage" rows="4" />
         </TextAreaContainer>
+        <Hidden>
+          <input
+            type="checkbox"
+            name="groovy_tan_glossy_deer_mouse"
+            value="1"
+            tabIndex="-1"
+            autoComplete="no"
+          />
+        </Hidden>
         <FormButton type="submit">Send</FormButton>
       </form>
     </Page>
