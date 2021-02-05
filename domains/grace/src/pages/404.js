@@ -5,16 +5,14 @@ import Page from "common/page";
 
 function FourOhFour() {
   return (
-    <Page title="Page Not Found">
-      <div>
-        <p>Unable to find this page (that&apos;s a 404!). Are you sure this is a valid link?</p>
-      </div>
-    </Page>
+    <Layout>
+      <Page title="Page Not Found">
+        <div>
+          <p>Unable to find this page (that&apos;s a 404!). Are you sure this is a valid link?</p>
+        </div>
+      </Page>
+    </Layout>
   );
 }
 
-export default () => (
-  <Layout>
-    <FourOhFour />
-  </Layout>
-);
+export default FourOhFour;

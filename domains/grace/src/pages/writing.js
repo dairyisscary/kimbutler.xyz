@@ -6,7 +6,7 @@ import Page from "common/page";
 import Microbes from "./microbes.pdf";
 
 function Writing() {
-  return (
+  const content = (
     <Page title="Writing">
       <Helmet>
         <title>Writing | Grace Kim-Butler</title>
@@ -64,10 +64,8 @@ function Writing() {
       </p>
     </Page>
   );
+
+  return <Layout>{content}</Layout>;
 }
 
-export default () => (
-  <Layout>
-    <Writing />
-  </Layout>
-);
+export default Writing;

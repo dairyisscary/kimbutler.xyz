@@ -32,43 +32,41 @@ const SentAlert = styled("header", {
 function Contact() {
   const isSent = typeof window !== "undefined" && /sent=true/.test(window.location.search);
   return (
-    <Page title="Contact">
-      <Helmet>
-        <title>Contact | Grace Kim-Butler</title>
-      </Helmet>
-      <form action="https://app.99inbound.com/api/e/ExU0a1d5" method="POST">
-        {isSent && <SentAlert>Thank you! I will get back to you as soon as I can.</SentAlert>}
-        <Fields>
-          <Field>
-            <FieldLabel htmlFor="contactName">Name</FieldLabel>
-            <Input type="text" id="contactName" name="name" autoComplete="name" />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="contactEmail">Email</FieldLabel>
-            <Input type="email" id="contactEmail" name="email" autoComplete="email" />
-          </Field>
-        </Fields>
-        <TextAreaContainer>
-          <FieldLabel htmlFor="contactMessage">Message</FieldLabel>
-          <TextArea name="message" id="contactMessage" rows="4" />
-        </TextAreaContainer>
-        <Hidden>
-          <input
-            type="checkbox"
-            name="groovy_tan_glossy_deer_mouse"
-            value="1"
-            tabIndex="-1"
-            autoComplete="no"
-          />
-        </Hidden>
-        <FormButton type="submit">Send</FormButton>
-      </form>
-    </Page>
+    <Layout>
+      <Page title="Contact">
+        <Helmet>
+          <title>Contact | Grace Kim-Butler</title>
+        </Helmet>
+        <form action="https://app.99inbound.com/api/e/ExU0a1d5" method="POST">
+          {isSent && <SentAlert>Thank you! I will get back to you as soon as I can.</SentAlert>}
+          <Fields>
+            <Field>
+              <FieldLabel htmlFor="contactName">Name</FieldLabel>
+              <Input type="text" id="contactName" name="name" autoComplete="name" />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="contactEmail">Email</FieldLabel>
+              <Input type="email" id="contactEmail" name="email" autoComplete="email" />
+            </Field>
+          </Fields>
+          <TextAreaContainer>
+            <FieldLabel htmlFor="contactMessage">Message</FieldLabel>
+            <TextArea name="message" id="contactMessage" rows="4" />
+          </TextAreaContainer>
+          <Hidden>
+            <input
+              type="checkbox"
+              name="groovy_tan_glossy_deer_mouse"
+              value="1"
+              tabIndex="-1"
+              autoComplete="no"
+            />
+          </Hidden>
+          <FormButton type="submit">Send</FormButton>
+        </form>
+      </Page>
+    </Layout>
   );
 }
 
-export default () => (
-  <Layout>
-    <Contact />
-  </Layout>
-);
+export default Contact;

@@ -9,16 +9,18 @@ function MarkdownPage({ data }) {
   const post = data.markdownRemark;
   const { title } = post.frontmatter;
   return (
-    <Page title={title}>
-      <Helmet>
-        <title>{title} | Grace Kim-Butler</title>
-      </Helmet>
-      <div
-        className="markdown-content"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: post.html }}
-      />
-    </Page>
+    <Layout>
+      <Page title={title}>
+        <Helmet>
+          <title>{title} | Grace Kim-Butler</title>
+        </Helmet>
+        <div
+          className="markdown-content"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: post.html }}
+        />
+      </Page>
+    </Layout>
   );
 }
 
@@ -33,8 +35,4 @@ export const query = graphql`
   }
 `;
 
-export default (props) => (
-  <Layout>
-    <MarkdownPage {...props} />
-  </Layout>
-);
+export default MarkdownPage;

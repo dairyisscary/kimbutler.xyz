@@ -113,28 +113,26 @@ const Avatar = styled("div", {
 
 function Index() {
   return (
-    <IndexWrapper>
-      <Helmet>
-        <title>Grace Kim-Butler</title>
-      </Helmet>
-      <Avatar />
-      <Content>
-        <H1>Grace Kim-Butler</H1>
-        <TagLine>Anthropologist of Art&nbsp;and&nbsp;Science</TagLine>
-        <PaddedTagLine>ACLS Postdoctoral Fellow at Vanderbilt University</PaddedTagLine>
-      </Content>
-      <Navigation>
-        <NavLink to="/about/">About</NavLink>
-        <NavLink to="/research/">Research</NavLink>
-        <NavLink to="/writing/">Writing</NavLink>
-        <NavLink to="/contact/">Contact</NavLink>
-      </Navigation>
-    </IndexWrapper>
+    <Layout>
+      <IndexWrapper>
+        <Helmet>
+          <title>Grace Kim-Butler</title>
+        </Helmet>
+        <Avatar />
+        <Content>
+          <H1>Grace Kim-Butler</H1>
+          <TagLine>Anthropologist of Art&nbsp;and&nbsp;Science</TagLine>
+          <PaddedTagLine>ACLS Postdoctoral Fellow at Vanderbilt University</PaddedTagLine>
+        </Content>
+        <Navigation>
+          <NavLink to="/about/">About</NavLink>
+          <NavLink to="/research/">Research</NavLink>
+          <NavLink to="/writing/">Writing</NavLink>
+          <NavLink to="/contact/">Contact</NavLink>
+        </Navigation>
+      </IndexWrapper>
+    </Layout>
   );
 }
 
-export default () => (
-  <Layout>
-    <Index />
-  </Layout>
-);
+export default Index;
