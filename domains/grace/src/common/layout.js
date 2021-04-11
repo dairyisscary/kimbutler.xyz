@@ -3,7 +3,8 @@ import { Helmet } from "react-helmet";
 import { styled } from "styletron-react";
 import "normalize.css";
 
-import Styles from "./layout.css";
+import "./layout.css";
+import FavIcon from "pages/images/favicon.png";
 
 const Wrapper = styled("div", {
   display: "flex",
@@ -29,7 +30,8 @@ function Layout({ children }) {
   return (
     <Wrapper>
       <Helmet>
-        <meta name="theme-color" content={Styles.bodyBackgroundColor} />
+        <meta name="theme-color" content="#353f4c" />
+        <link rel="shortcut icon" href={FavIcon} />
       </Helmet>
       {children}
       <Footer>

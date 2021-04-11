@@ -9,7 +9,6 @@ aws s3 cp --recursive --metadata-directive REPLACE --content-type "text/html; ch
 aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_EXPIRES" public/page-data "s3://$BUCKET_NAME/page-data"
 aws s3 cp --metadata-directive REPLACE --cache-control "$BROWSER_EXPIRES" public/chunk-map.json "s3://$BUCKET_NAME"
 aws s3 cp --metadata-directive REPLACE --cache-control "$BROWSER_EXPIRES" public/webpack.stats.json "s3://$BUCKET_NAME"
-aws s3 cp --metadata-directive REPLACE --cache-control "$BROWSER_EXPIRES" public/.iconstats.json "s3://$BUCKET_NAME"
 
 # Static and JS/CSS that can be cached forever
 aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" public/static "s3://$BUCKET_NAME/static"
