@@ -1,0 +1,42 @@
+---
+import FavIcon from "@/assets/favicon.png";
+
+export type Props = {
+  content?: { title?: string };
+  class?: string;
+};
+
+const { content, class: className } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{content?.title ? `${content.title} | ` : ""}Grace Kim-Butler</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#353f4c" />
+    <link rel="shortcut icon" href={FavIcon} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400&display=swap"
+    />
+  </head>
+  <body>
+    <div class="flex flex-col items-center justify-center min-h-screen py-12 px-8">
+      <main class={className}>
+        <slot />
+      </main>
+      <footer class="mt-8 text-center text-sm uppercase tracking-widest">
+        &copy; Grace Kim-Butler 2018-present
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  body {
+    background: theme("colors.gray.600");
+    background: radial-gradient(circle, theme("colors.gray.500") 0%, theme("colors.gray.800") 100%);
+    @apply min-h-screen font-sans text-white;
+  }
+</style>
