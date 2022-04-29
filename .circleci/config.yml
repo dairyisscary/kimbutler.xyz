@@ -1,0 +1,139 @@
+version: 2.1
+
+commands:
+  checkout_monorepo:
+    description: Checkout the git mono repo with a standard root
+    steps:
+      - checkout:
+          path: /home/circleci/kimbutler.xyz
+
+  pnpm_install:
+    description: PNPM install and link node deps
+    steps:
+      - run:
+          name: Installing PNPM
+          command: |
+            sudo npm install -g pnpm@6.32.11
+            pnpm config set store-dir /home/circleci/.pnpm-store
+      - run:
+          name: Installing NPM Deps
+          command: pnpm install --frozen-lockfile
+
+  attach_made_workspace:
+    description: Attach workspace generated files from another job
+    steps:
+      - attach_workspace:
+          at: /home/circleci/kimbutler.xyz
+
+executors:
+  default_grace_node_env:
+    docker:
+      - image: cimg/node:16.13.2
+    working_directory: /home/circleci/kimbutler.xyz/domains/grace
+
+  default_terraform_env:
+    docker:
+      - image: dairyisscary/terraform:1.1.9
+    working_directory: /home/circleci/kimbutler.xyz
+
+  default_awscli_env:
+    docker:
+      - image: dairyisscary/awscli:2.6.1
+    working_directory: /home/circleci/kimbutler.xyz
+
+jobs:
+  fmt_infrastructure:
+    executor: default_terraform_env
+    steps:
+      - checkout_monorepo
+      - run:
+          name: Formatting Terraform
+          command: terraform fmt -recursive -check .
+
+  deploy_infrastructure:
+    executor: default_terraform_env
+    steps:
+      - checkout_monorepo
+      - run:
+          name: Initing Terraform
+          command: |
+            cd infra && terraform init
+      - run:
+          name: Forming Infrastructure
+          command: |
+            cd infra && \
+            terraform apply -auto-approve && \
+            mkdir -p output
+            terraform output -json > output/terraform.json
+      - persist_to_workspace:
+          root: .
+          paths:
+            - infra/output
+
+  static_analysis_grace:
+    executor: default_grace_node_env
+    steps:
+      - checkout_monorepo
+      - pnpm_install
+      - run:
+          name: Checking Formatting
+          command: pnpm exec prettier --plugin-search-dir=. --check .
+      - run:
+          name: Checking Types
+          command: pnpm exec astro check --experimental-integrations
+
+  build_grace_static_html:
+    executor: default_grace_node_env
+    steps:
+      - checkout_monorepo
+      - pnpm_install
+      - run:
+          name: Building
+          command: pnpm build
+      - persist_to_workspace:
+          root: "../../"
+          paths:
+            - domains/grace/dist
+
+  deploy_grace_to_aws:
+    executor: default_awscli_env
+    steps:
+      - checkout_monorepo
+      - attach_made_workspace
+      - run:
+          name: Uploading to S3 Bucket
+          command: |
+            cd /home/circleci/kimbutler.xyz/domains/grace
+
+            ONE_YEAR="31536000"
+            BUCKET_NAME="$(cat ../../infra/output/terraform.json | jq '.grace_static_bucket_name.value' -r)"
+            BROWSER_EXPIRES="public, max-age=0, s-maxage=$ONE_YEAR, must-revalidate"
+            BROWSER_IMMUTABLE="public, max-age=$ONE_YEAR, immutable"
+
+            # HTML and Page Data that can't be (browser) cached
+            aws s3 cp --recursive --metadata-directive REPLACE --content-type "text/html; charset=utf-8" --cache-control "$BROWSER_EXPIRES" --exclude "*" --include "*.html" dist "s3://$BUCKET_NAME"
+
+            # Static assets and JS/CSS that can be cached forever
+            aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" --exclude "*" --include "asset.*" dist/assets "s3://$BUCKET_NAME/assets"
+
+workflows:
+  version: 2
+  "Check and Deploy":
+    jobs:
+      - fmt_infrastructure
+      - deploy_infrastructure:
+          requires:
+            - fmt_infrastructure
+          filters:
+            branches:
+              only: production
+      - static_analysis_grace
+      - build_grace_static_html
+      - deploy_grace_to_aws:
+          requires:
+            - static_analysis_grace
+            - build_grace_static_html
+            - deploy_infrastructure
+          filters:
+            branches:
+              only: production
