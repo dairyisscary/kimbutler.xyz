@@ -1,0 +1,65 @@
+---
+import ContentLayout from "@/layouts/Content.astro";
+
+const baseFormClasses =
+  "bg-transparent rounded border border-white block py-3 px-4 transition-colors focus:bg-opacity-10 focus:bg-white";
+const baseFormInputClasses = `${baseFormClasses} w-full`;
+const labelClasses = "block mb-4 text-sm uppercase tracking-widest";
+const buttonClasses = `${baseFormClasses} uppercase hover:bg-opacity-10 hover:bg-white ml-auto`;
+---
+
+<ContentLayout content={{ title: "Contact" }}>
+  <form action="https://app.99inbound.com/api/e/ExU0a1d5" method="POST">
+    <div
+      id="contactAlert"
+      class="hidden flex mb-8 items-center border border-green-200 text-green-200 rounded p-4"
+      role="region"
+      aria-live="polite"
+    >
+      Thank you! I will get back to you as soon as I can.
+    </div>
+    <div class="flex items-end space-x-8">
+      <div class="flex-1">
+        <label class={labelClasses} for="contactName">Name</label>
+        <input
+          class={baseFormInputClasses}
+          type="text"
+          id="contactName"
+          name="name"
+          autocomplete="name"
+          required
+        />
+      </div>
+      <div class="flex-1">
+        <label class={labelClasses} for="contactEmail">Email Address</label>
+        <input
+          class={baseFormInputClasses}
+          type="email"
+          id="contactEmail"
+          name="email"
+          autocomplete="email"
+          required
+        />
+      </div>
+    </div>
+    <div class="my-6">
+      <label class={labelClasses} for="contactMessage">Message</label>
+      <textarea class={baseFormInputClasses} name="message" id="contactMessage" rows={4} required
+      ></textarea>
+    </div>
+    <input
+      class="hidden"
+      type="checkbox"
+      name="groovy_tan_glossy_deer_mouse"
+      value="1"
+      tabindex={-1}
+      autocomplete="no"
+    />
+    <button class={buttonClasses} type="submit">Send</button>
+  </form>
+  <script is:inline>
+    if (/sent=true/.test(window.location.search)) {
+      document.getElementById("contactAlert").classList.remove("hidden");
+    }
+  </script>
+</ContentLayout>
