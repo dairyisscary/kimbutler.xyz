@@ -1,0 +1,45 @@
+---
+import Avatar from "@/assets/avatar.png";
+import Avatar2x from "@/assets/avatar@2x.png";
+import RootLayout from "@/layouts/Root.astro";
+---
+
+<RootLayout class="flex flex-col items-center text-center">
+  <picture class="block w-[120px] h-[120px] rounded-full border-white border overflow-hidden">
+    <source media="(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)" srcset={Avatar2x}
+    />
+    <img src={Avatar} alt="Headshot of Grace" />
+  </picture>
+  <div class="content my-12 py-14 px-10 border-b border-t border-white relative">
+    <h1 class="uppercase mb-6 font-title tracking-widest text-3xl">Grace Kim-Butler</h1>
+    <h2 class="uppercase tracking-widest text-sm">Anthropologist of Art and&nbsp;Science</h2>
+    <h2 class="uppercase tracking-widest mt-1 text-sm">
+      Postdoctoral Researcher at Utrecht&nbsp;University
+    </h2>
+  </div>
+  <nav class="border border-white rounded mx-8 flex flex-col sm:flex-row">
+    <a href="/about/">About</a>
+    <a href="/research/">Research</a>
+    <a href="/writing/">Writing</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</RootLayout>
+
+<style>
+  .content::before,
+  .content::after {
+    content: "";
+    @apply absolute left-1/2 -ml-px h-12 w-px bg-white;
+  }
+  .content::before {
+    top: calc(theme("spacing.12") * -1 - 1px);
+  }
+
+  .content::after {
+    bottom: calc(theme("spacing.12") * -1 - 1px);
+  }
+
+  nav > a {
+    @apply flex h-10 flex-1 items-center justify-center py-3 px-6 text-sm uppercase tracking-widest hover:bg-white hover:bg-opacity-10;
+  }
+</style>
