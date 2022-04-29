@@ -1,0 +1,35 @@
+---
+title: Writing
+layout: "@/layouts/Content.astro"
+setup: |
+  import Microbes from "@/assets/microbes.pdf";
+---
+
+## ["Cultures on Culture: Biofilm, Conservation, and the Interface of Art and Environment"][getty_cultures]
+
+While a 2019-20 "Art and Ecology" postdoctoral fellow at the Getty Research Institute, I wrote a brief description of my
+project in _The Getty Magazine_.
+
+## ["Cigarettes, Saliva, Art: Laboratory Expertise in Florence, Italy"][cigarettes_florence]
+
+In Florence, I followed artisanal and scientific restoration practices. This article focuses on seemingly trivial
+material traces -- the monk's cigarette and the chemist's saliva -- as embodiments of these experts' confidence and
+discernment with precious historical and aesthetic artifacts. I argue that both the artisan and the scientist perform
+expertise by relying on sensory, craft-based familiarity with materials. Published in the _Journal of Modern Craft_.
+
+## <a href={Microbes}>"Putting Microbes to Work: Using Biotechnology to Restore Architecture & Art in Italy"</a>
+
+How are artworks and cultural heritage made into restoration "workspaces" for microbes? Here, I think through the
+implications of the multispecies work that brings microbiologists and bacteria together to clean and consolidate
+artifacts ranging from ancient clay terraces in Sicily to a modern stone statue in the Monumental Cemetery of Milan.
+Published in _Thresholds_.
+
+## ["All the World Is Here," Exhibition Review][all_world]
+
+My colleague, Alison Laurence, and I reviewed the exhibition, _All the World Is Here: Harvard's Peabody Museum and the
+Invention of American Anthropology_, at Harvard University's Peabody Museum of Archaeology & Ethnology. Published in the
+_History of Anthropology Newsletter_.
+
+[getty_cultures]: https://www.getty.edu/about/whatwedo/getty_magazine/gettymag_spring2020.pdf
+[cigarettes_florence]: https://www.tandfonline.com/eprint/a4XxE3yTrtvwDtCUekA8/full
+[all_world]: http://histanthro.org/reviews/all-the-world-is-here/
