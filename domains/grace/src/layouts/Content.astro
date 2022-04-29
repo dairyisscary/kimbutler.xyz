@@ -1,0 +1,76 @@
+---
+import BackButton from "@/assets/back-button.svg";
+import RootLayout from "@/layouts/Root.astro";
+
+export type Props = {
+  content: { title: string };
+};
+
+const { content } = Astro.props;
+---
+
+<RootLayout {content}>
+  <div class="max-w-2xl w-full px-10 py-8 bg-black bg-opacity-60 rounded">
+    <div class="flex items-center mb-7 justify-between">
+      <h1 class="w-max font-title uppercase text-2xl border-b pb-2 tracking-widest">
+        {content.title}
+      </h1>
+      <a
+        href="/"
+        class="flex items-center justify-center rounded-full w-9 h-9 transition-colors hover:bg-white hover:bg-opacity-10"
+      >
+        <img class="w-[70%] h-[70%]" aria-hidden="true" src={BackButton} />
+        <span class="sr-only">Back to Home</span>
+      </a>
+    </div>
+    <div class="prose-content">
+      <slot></slot>
+    </div>
+  </div>
+</RootLayout>
+
+<style>
+  .prose-content :global(a) {
+    @apply border-b border-dotted border-white transition-colors hover:border-transparent;
+  }
+
+  .prose-content :global(h2),
+  .prose-content :global(h3) {
+    @apply mb-4;
+  }
+
+  .prose-content :global(h2) {
+    @apply text-xl;
+  }
+
+  .prose-content :global(h3) {
+    @apply text-lg;
+  }
+
+  .prose-content :global(p) {
+    @apply mb-8;
+  }
+
+  .prose-content :global(ul) {
+    @apply list-disc;
+  }
+
+  .prose-content :global(ol) {
+    @apply list-decimal;
+  }
+
+  .prose-content :global(ul),
+  .prose-content :global(ol) {
+    @apply mb-8 space-y-2 pl-10;
+  }
+
+  .prose-content :global(ul li),
+  .prose-content :global(ol li) {
+    @apply pl-2;
+  }
+
+  .prose-content :global(p + ul),
+  .prose-content :global(p + ol) {
+    @apply -mt-4;
+  }
+</style>
