@@ -12,6 +12,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.11.0"
     }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 3.13.0"
+    }
   }
 }
 
@@ -23,15 +28,21 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_route53_zone" "root" {
-  name = local.root_domain
+provider "cloudflare" {}
+
+resource "cloudflare_zone" "root" {
+  zone = local.root_domain
 }
 
 module "grace" {
   source = "../domains/grace/infra"
 
-  root_domain      = local.root_domain
-  root_dns_zone_id = aws_route53_zone.root.zone_id
+  root_domain             = local.root_domain
+  root_cloudflare_zone_id = cloudflare_zone.root.id
+}
+
+output "cloudflare_zone_id" {
+  value = cloudflare_zone.root.id
 }
 
 output "grace_static_bucket_name" {

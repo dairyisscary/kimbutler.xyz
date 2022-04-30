@@ -42,27 +42,34 @@ executors:
     working_directory: /home/circleci/kimbutler.xyz
 
 jobs:
-  fmt_infrastructure:
+  validate_infrastructure:
     executor: default_terraform_env
     steps:
       - checkout_monorepo
       - run:
           name: Formatting Terraform
           command: terraform fmt -recursive -check .
+      - run:
+          name: Validating Terraform
+          command: |
+            cd infra
+            terraform init
+            terraform validate
 
-  deploy_infrastructure:
+  provision_infrastructure:
     executor: default_terraform_env
     steps:
       - checkout_monorepo
       - run:
           name: Initing Terraform
           command: |
-            cd infra && terraform init
+            cd infra
+            terraform init
       - run:
           name: Forming Infrastructure
           command: |
-            cd infra && \
-            terraform apply -auto-approve && \
+            cd infra
+            terraform apply -auto-approve
             mkdir -p output
             terraform output -json > output/terraform.json
       - persist_to_workspace:
@@ -95,7 +102,7 @@ jobs:
           paths:
             - domains/grace/dist
 
-  deploy_grace_to_aws:
+  deploy_grace:
     executor: default_awscli_env
     steps:
       - checkout_monorepo
@@ -116,24 +123,31 @@ jobs:
             # Static assets and JS/CSS that can be cached forever
             aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" --exclude "*" --include "asset.*" dist/assets "s3://$BUCKET_NAME/assets"
 
+            # Now purge the CDN
+            CLOUDFLARE_ZONE_ID="$(cat ../../infra/output/terraform.json | jq '.cloudflare_zone_id.value' -r)"
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              --data '{"purge_everything":true}'
+
 workflows:
   version: 2
   "Check and Deploy":
     jobs:
-      - fmt_infrastructure
-      - deploy_infrastructure:
+      - validate_infrastructure
+      - provision_infrastructure:
           requires:
-            - fmt_infrastructure
+            - validate_infrastructure
           filters:
             branches:
               only: production
       - static_analysis_grace
       - build_grace_static_html
-      - deploy_grace_to_aws:
+      - deploy_grace:
           requires:
             - static_analysis_grace
             - build_grace_static_html
-            - deploy_infrastructure
+            - provision_infrastructure
           filters:
             branches:
               only: production
