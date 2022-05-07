@@ -113,8 +113,9 @@ jobs:
             cd /home/circleci/kimbutler.xyz/domains/grace
 
             ONE_YEAR="31536000"
+            FIVE_MINUTES="300"
             BUCKET_NAME="$(cat ../../infra/output/terraform.json | jq '.grace_static_bucket_name.value' -r)"
-            BROWSER_EXPIRES="public, max-age=0, s-maxage=$ONE_YEAR, must-revalidate"
+            BROWSER_EXPIRES="public, max-age=$FIVE_MINUTES, s-maxage=$ONE_YEAR, must-revalidate"
             BROWSER_IMMUTABLE="public, max-age=$ONE_YEAR, immutable"
 
             # HTML and Page Data that can't be (browser) cached
