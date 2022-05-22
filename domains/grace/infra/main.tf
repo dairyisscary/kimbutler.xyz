@@ -99,3 +99,14 @@ resource "cloudflare_record" "analytics" {
   name    = "chilly-nutritious"
   value   = "thorn-side-kings-leon.b-cdn.net"
 }
+
+resource "cloudflare_worker_script" "api" {
+  name    = "api"
+  content = file("${path.module}/../src/api/v1.mjs")
+}
+
+resource "cloudflare_worker_route" "api" {
+  zone_id     = var.root_cloudflare_zone_id
+  pattern     = "grace.${var.root_domain}/api/v1/*"
+  script_name = cloudflare_worker_script.api.name
+}
