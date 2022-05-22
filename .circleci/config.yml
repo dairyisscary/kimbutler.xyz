@@ -132,23 +132,27 @@ jobs:
               --data '{"purge_everything":true}'
 
 workflows:
-  version: 2
-  "Check and Deploy":
+  Deploy:
+    when:
+      equal: [production, << pipeline.git.branch >>]
     jobs:
       - validate_infrastructure
+      - static_analysis_grace
+      - build_grace_static_html
       - provision_infrastructure:
           requires:
             - validate_infrastructure
-          filters:
-            branches:
-              only: production
-      - static_analysis_grace
-      - build_grace_static_html
       - deploy_grace:
           requires:
             - static_analysis_grace
             - build_grace_static_html
             - provision_infrastructure
-          filters:
-            branches:
-              only: production
+
+  "Validate Branch":
+    when:
+      not:
+        equal: [production, << pipeline.git.branch >>]
+    jobs:
+      - validate_infrastructure
+      - static_analysis_grace
+      - build_grace_static_html
