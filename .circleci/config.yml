@@ -13,7 +13,7 @@ commands:
       - run:
           name: Installing PNPM
           command: |
-            sudo npm install -g pnpm@7.1.0
+            sudo npm install -g pnpm@7.5.2
             pnpm config set store-dir /home/circleci/.pnpm-store
       - run:
           name: Installing NPM Deps
@@ -122,7 +122,7 @@ jobs:
             aws s3 cp --recursive --metadata-directive REPLACE --content-type "text/html; charset=utf-8" --cache-control "$BROWSER_EXPIRES" --exclude "*" --include "*.html" dist "s3://$BUCKET_NAME"
 
             # Static assets and JS/CSS that can be cached forever
-            aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" --exclude "*" --include "asset.*" dist/assets "s3://$BUCKET_NAME/assets"
+            aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" dist/assets "s3://$BUCKET_NAME/assets"
 
             # Now purge the CDN
             CLOUDFLARE_ZONE_ID="$(cat ../../infra/output/terraform.json | jq '.cloudflare_zone_id.value' -r)"
