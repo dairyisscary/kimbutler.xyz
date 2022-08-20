@@ -25,20 +25,22 @@ const isProductionBuild = import.meta.env.PROD;
   <body>
     <div class="flex flex-col items-center justify-center min-h-screen py-12 px-8">
       <main class={className}>
-        <slot></slot>
+        <slot />
       </main>
       <footer class="mt-8 text-center text-sm uppercase tracking-widest">
         &copy; Grace Kim-Butler 2018-present
       </footer>
     </div>
-    {isProductionBuild && (
-      <script
-        type="text/javascript"
-        src="https://chilly-nutritious.kimbutler.xyz/script.js"
-        data-site="SULYZTWP"
-        defer
-      />
-    )}
+    {
+      isProductionBuild && (
+        <script
+          type="text/javascript"
+          src="https://chilly-nutritious.kimbutler.xyz/script.js"
+          data-site="SULYZTWP"
+          defer
+        />
+      )
+    }
   </body>
 
   <style is:global>

@@ -24,7 +24,7 @@ export default function createMinifyHTMLPlugin(): AstroIntegration {
         const htmlFilePaths = routes.map(({ component, pathname }) => {
           return component.endsWith("/pages/404.astro")
             ? join(dirPathName, "404.html")
-            : join(dirPathName, pathname, "index.html");
+            : join(dirPathName, pathname!, "index.html");
         });
         await Promise.all(htmlFilePaths.map(minifyHtmlFilePath));
       },

@@ -11,6 +11,6 @@
     },
     "strict": true,
     "target": "esnext",
-    "types": ["vite/client"]
+    "types": ["astro/client"]
   }
 }
