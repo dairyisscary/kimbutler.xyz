@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
+    "isolatedModules": true,
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
@@ -11,7 +12,6 @@
     },
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext",
-    "types": ["astro/client"]
+    "target": "esnext"
   }
 }
