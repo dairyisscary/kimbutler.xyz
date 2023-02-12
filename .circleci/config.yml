@@ -13,7 +13,7 @@ commands:
       - run:
           name: Installing PNPM
           command: |
-            sudo npm install -g pnpm@7.26.1
+            sudo npm install -g pnpm@7.27.0
             pnpm config set store-dir /home/circleci/.pnpm-store
       - run:
           name: Installing NPM Deps
