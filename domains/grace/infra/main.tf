@@ -93,13 +93,6 @@ resource "cloudflare_record" "grace" {
   proxied = true
 }
 
-resource "cloudflare_record" "analytics" {
-  zone_id = var.root_cloudflare_zone_id
-  type    = "CNAME"
-  name    = "chilly-nutritious"
-  value   = "thorn-side-kings-leon.b-cdn.net"
-}
-
 resource "cloudflare_worker_script" "api" {
   name    = "api"
   content = file("${path.module}/../src/api/v1.mjs")

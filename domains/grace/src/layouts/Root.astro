@@ -7,7 +7,6 @@ export type Props = {
 };
 
 const { content, class: className } = Astro.props;
-const isProductionBuild = import.meta.env.PROD;
 ---
 
 <html lang="en">
@@ -33,16 +32,6 @@ const isProductionBuild = import.meta.env.PROD;
         &copy; Grace Kim-Butler 2018-present
       </footer>
     </div>
-    {
-      isProductionBuild && (
-        <script
-          type="text/javascript"
-          src="https://chilly-nutritious.kimbutler.xyz/script.js"
-          data-site="SULYZTWP"
-          defer
-        />
-      )
-    }
   </body>
 
   <style is:global>
