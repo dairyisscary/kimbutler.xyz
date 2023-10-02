@@ -1,24 +1,29 @@
 {
-  description = "spookysoftware";
+  description = "The online presence of kimbutler.xyz";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { self, nixpkgs }: let
-    getSystemPkgs = system: nixpkgs.legacyPackages.${system};
-   
-    forAllSystems = mapFn:
-      nixpkgs.lib.genAttrs ["x86_64-linux"] (
-        system: mapFn (getSystemPkgs system)
-      );
-  in {
+  outputs = inputs @ { nixpkgs, devenv, ... }:
+    let
+      forAllSystems = mapFn: nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-darwin" ] (system: mapFn {
+        inherit system inputs;
+        pkgs = nixpkgs.legacyPackages.${system};
+      });
+    in
+    {
+      formatter = forAllSystems (args: args.pkgs.nixpkgs-fmt);
 
-    devShells = forAllSystems (systemPkgs: {
-      default = systemPkgs.mkShell {
-        buildInputs = [systemPkgs.nodejs-slim systemPkgs.nodePackages.pnpm];
-      };
-    });
-
-  };
+      devShells = forAllSystems (args: rec {
+        default = infrastructure;
+        grace = import ./domains/grace/shell.nix args;
+        infrastructure = import ./shell.nix args;
+      });
+    };
 }

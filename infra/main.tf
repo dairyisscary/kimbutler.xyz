@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.1.0"
+  required_version = "~> 1.5.7"
 
   backend "s3" {
     bucket = "dairyisscary-terraform-state"
@@ -10,35 +10,44 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.11.0"
+      version = "~> 5.19.0"
     }
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.13.0"
+      version = "~> 4.15.0"
     }
   }
 }
 
 locals {
-  root_domain = "kimbutler.xyz"
+  root_domain           = "kimbutler.xyz"
+  cloudflare_account_id = "a135e34dcd53a22a339f6a334d0281db"
 }
 
 provider "aws" {
   region = "us-east-1"
 }
 
-provider "cloudflare" {}
+provider "cloudflare" {
+  api_token = trimspace(file(var.cloudflare_api_token_file))
+}
+
+variable "cloudflare_api_token_file" {
+  type = string
+}
 
 resource "cloudflare_zone" "root" {
-  zone = local.root_domain
+  account_id = local.cloudflare_account_id
+  zone       = local.root_domain
 }
 
 module "grace" {
   source = "../domains/grace/infra"
 
-  root_domain             = local.root_domain
-  root_cloudflare_zone_id = cloudflare_zone.root.id
+  root_domain                = local.root_domain
+  root_cloudflare_zone_id    = cloudflare_zone.root.id
+  root_cloudflare_account_id = local.cloudflare_account_id
 }
 
 output "cloudflare_zone_id" {

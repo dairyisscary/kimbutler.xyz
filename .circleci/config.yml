@@ -28,17 +28,12 @@ commands:
 executors:
   default_grace_node_env:
     docker:
-      - image: cimg/node:18.16.0
+      - image: cimg/node:18.17.1
     working_directory: /home/circleci/kimbutler.xyz/domains/grace
 
   default_terraform_env:
     docker:
-      - image: dairyisscary/terraform:1.1.9
-    working_directory: /home/circleci/kimbutler.xyz
-
-  default_awscli_env:
-    docker:
-      - image: dairyisscary/awscli:2.6.1
+      - image: hashicorp/terraform:1.5.7
     working_directory: /home/circleci/kimbutler.xyz
 
 jobs:
@@ -49,33 +44,6 @@ jobs:
       - run:
           name: Formatting Terraform
           command: terraform fmt -recursive -check .
-      - run:
-          name: Validating Terraform
-          command: |
-            cd infra
-            terraform init
-            terraform validate
-
-  provision_infrastructure:
-    executor: default_terraform_env
-    steps:
-      - checkout_monorepo
-      - run:
-          name: Initing Terraform
-          command: |
-            cd infra
-            terraform init
-      - run:
-          name: Forming Infrastructure
-          command: |
-            cd infra
-            terraform apply -auto-approve
-            mkdir -p output
-            terraform output -json > output/terraform.json
-      - persist_to_workspace:
-          root: .
-          paths:
-            - infra/output
 
   static_analysis_grace:
     executor: default_grace_node_env
@@ -99,61 +67,15 @@ jobs:
       - run:
           name: Building
           command: pnpm build
-      - persist_to_workspace:
-          root: "../../"
-          paths:
-            - domains/grace/dist
-
-  deploy_grace:
-    executor: default_awscli_env
-    steps:
-      - checkout_monorepo
-      - attach_made_workspace
-      - run:
-          name: Uploading to S3 Bucket
-          command: |
-            cd /home/circleci/kimbutler.xyz/domains/grace
-
-            ONE_YEAR="31536000"
-            FIVE_MINUTES="300"
-            BUCKET_NAME="$(cat ../../infra/output/terraform.json | jq '.grace_static_bucket_name.value' -r)"
-            BROWSER_EXPIRES="public, max-age=$FIVE_MINUTES, s-maxage=$ONE_YEAR, must-revalidate"
-            BROWSER_IMMUTABLE="public, max-age=$ONE_YEAR, immutable"
-
-            # HTML and Page Data that can't be (browser) cached
-            aws s3 cp --recursive --metadata-directive REPLACE --content-type "text/html; charset=utf-8" --cache-control "$BROWSER_EXPIRES" --exclude "*" --include "*.html" dist "s3://$BUCKET_NAME"
-
-            # Static assets and JS/CSS that can be cached forever
-            aws s3 cp --recursive --metadata-directive REPLACE --cache-control "$BROWSER_IMMUTABLE" dist/_astro "s3://$BUCKET_NAME/_astro"
-
-            # Now purge the CDN
-            CLOUDFLARE_ZONE_ID="$(cat ../../infra/output/terraform.json | jq '.cloudflare_zone_id.value' -r)"
-            curl -X POST "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
-              -H "Content-Type: application/json" \
-              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-              --data '{"purge_everything":true}'
 
 workflows:
-  Deploy:
-    when:
-      equal: [production, << pipeline.git.branch >>]
-    jobs:
-      - validate_infrastructure
-      - static_analysis_grace
-      - build_grace_static_html
-      - provision_infrastructure:
-          requires:
-            - validate_infrastructure
-      - deploy_grace:
-          requires:
-            - static_analysis_grace
-            - build_grace_static_html
-            - provision_infrastructure
-
   "Validate Branch":
     when:
-      not:
-        equal: [production, << pipeline.git.branch >>]
+      and:
+        - not:
+            equal: [production, << pipeline.git.branch >>]
+        - not:
+            equal: [main, << pipeline.git.branch >>]
     jobs:
       - validate_infrastructure
       - static_analysis_grace

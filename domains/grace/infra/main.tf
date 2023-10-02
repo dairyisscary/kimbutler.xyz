@@ -1,15 +1,15 @@
 terraform {
-  required_version = "~> 1.1.0"
+  required_version = "~> 1.5.7"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.11.0"
+      version = "~> 5.19.0"
     }
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.13.0"
+      version = "~> 4.15.0"
     }
   }
 }
@@ -19,6 +19,10 @@ variable "root_domain" {
 }
 
 variable "root_cloudflare_zone_id" {
+  type = string
+}
+
+variable "root_cloudflare_account_id" {
   type = string
 }
 
@@ -89,13 +93,14 @@ resource "cloudflare_record" "grace" {
   zone_id = var.root_cloudflare_zone_id
   type    = "CNAME"
   name    = "grace"
-  value   = aws_s3_bucket.website_bucket.website_endpoint
+  value   = aws_s3_bucket_website_configuration.website_bucket_website.website_endpoint
   proxied = true
 }
 
 resource "cloudflare_worker_script" "api" {
-  name    = "api"
-  content = file("${path.module}/../src/api/v1.mjs")
+  account_id = var.root_cloudflare_account_id
+  name       = "api"
+  content    = file("${path.module}/../src/api/v1.mjs")
 }
 
 resource "cloudflare_worker_route" "api" {
