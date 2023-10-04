@@ -52,7 +52,7 @@ jobs:
       - pnpm_install
       - run:
           name: Checking Formatting
-          command: pnpm exec prettier --plugin-search-dir=. --check .
+          command: pnpm exec prettier --check --ignore-unknown './**/*'
       - run:
           name: Checking Types
           command: |

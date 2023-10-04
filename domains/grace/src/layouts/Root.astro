@@ -15,7 +15,7 @@ const { content, class: className } = Astro.props;
     <title>{content?.title ? `${content.title} | ` : ""}Grace Kim-Butler</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#353f4c" />
-    <link rel="shortcut icon" href={FavIcon} />
+    <link rel="shortcut icon" href={FavIcon.src} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,17 +32,16 @@ const { content, class: className } = Astro.props;
         &copy; Grace Kim-Butler 2018-present
       </footer>
     </div>
+    <style is:global>
+      body {
+        background: theme("colors.gray.600");
+        background: radial-gradient(
+          circle,
+          theme("colors.gray.500") 0%,
+          theme("colors.gray.800") 100%
+        );
+        @apply min-h-screen font-sans text-white;
+      }
+    </style>
   </body>
-
-  <style is:global>
-    body {
-      background: theme("colors.gray.600");
-      background: radial-gradient(
-        circle,
-        theme("colors.gray.500") 0%,
-        theme("colors.gray.800") 100%
-      );
-      @apply min-h-screen font-sans text-white;
-    }
-  </style>
 </html>
