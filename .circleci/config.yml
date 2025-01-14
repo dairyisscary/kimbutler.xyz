@@ -13,7 +13,7 @@ commands:
       - run:
           name: Installing PNPM
           command: |
-            sudo npm install -g pnpm@8.6.2
+            sudo npm install -g pnpm@9.15.3
             pnpm config set store-dir /home/circleci/.pnpm-store
       - run:
           name: Installing NPM Deps
@@ -28,12 +28,12 @@ commands:
 executors:
   default_grace_node_env:
     docker:
-      - image: cimg/node:18.17.1
+      - image: cimg/node:22.11.0
     working_directory: /home/circleci/kimbutler.xyz/domains/grace
 
   default_terraform_env:
     docker:
-      - image: hashicorp/terraform:1.5.7
+      - image: hashicorp/terraform:1.10.4
     working_directory: /home/circleci/kimbutler.xyz
 
 jobs:
