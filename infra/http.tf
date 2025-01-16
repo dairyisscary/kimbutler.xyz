@@ -32,7 +32,7 @@ resource "cloudflare_ruleset" "transform_http_headers" {
     expression  = "any(http.response.headers[\"content-type\"][*] contains \"text/html\")"
 
     action_parameters {
-      # Keep these alphabetized by name so that terraform doesn't diff
+      # Keep these alphabetized by name so that it doesn't diff
       headers {
         operation = "set"
         name      = "Referrer-Policy"

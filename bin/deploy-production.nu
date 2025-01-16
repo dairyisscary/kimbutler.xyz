@@ -13,15 +13,15 @@ def build_assets [] {
 def provision_infrastructure [] {
   print 'Forming infrastructure'
   cd ($env.DEVENV_ROOT | path join infra)
-  ^terraform init
-  ^terraform apply
+  ^tofu init
+  ^tofu apply
   cd -
 }
 
 def get_tf_output [] {
   print 'Getting TF output'
   cd ($env.DEVENV_ROOT | path join infra)
-  let output = (^terraform output -json | from json)
+  let output = ^tofu output -json | from json
   cd -
   $output
 }
