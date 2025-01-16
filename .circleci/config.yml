@@ -39,7 +39,7 @@ commands:
 executors:
   default_grace_node_env:
     docker:
-      - image: cimg/node:22.11.0
+      - image: cimg/node:22.22.0
     working_directory: /home/circleci/kimbutler.xyz/domains/grace
 
   default_tofu_env:

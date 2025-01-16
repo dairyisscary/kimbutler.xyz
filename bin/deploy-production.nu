@@ -3,7 +3,7 @@ const FIVE_MINUTES = 300
 
 def build_assets [] {
   print 'Building assets'
-  cd ($env.DEVENV_ROOT | path join domains/grace)
+  cd ($env.XYZ_ROOT | path join domains/grace)
   rm -rf dist
   ^nix develop '.#grace' --no-pure-eval --command pnpm install --frozen-lockfile
   ^nix develop '.#grace' --no-pure-eval --command pnpm build
@@ -12,7 +12,7 @@ def build_assets [] {
 
 def provision_infrastructure [] {
   print 'Forming infrastructure'
-  cd ($env.DEVENV_ROOT | path join infra)
+  cd ($env.XYZ_ROOT | path join infra)
   ^tofu init
   ^tofu apply
   cd -
@@ -20,7 +20,7 @@ def provision_infrastructure [] {
 
 def get_tf_output [] {
   print 'Getting TF output'
-  cd ($env.DEVENV_ROOT | path join infra)
+  cd ($env.XYZ_ROOT | path join infra)
   let output = ^tofu output -json | from json
   cd -
   $output
@@ -28,7 +28,7 @@ def get_tf_output [] {
 
 def upload_assets [tf_output] {
   print 'Uploading assets to S3'
-  let dist_path = ($env.DEVENV_ROOT | path join domains/grace/dist)
+  let dist_path = ($env.XYZ_ROOT | path join domains/grace/dist)
   let bucket_name = $tf_output.grace_static_bucket_name.value
 
   # HTML and Page Data that can't be (browser) cached
