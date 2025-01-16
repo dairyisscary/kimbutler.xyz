@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.10.4"
+  required_version = "~> 1.14.3"
 
   backend "s3" {
     bucket = "dairyisscary-terraform-state"
@@ -10,12 +10,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.83.1"
+      version = "~> 5.100.0"
     }
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.50.0"
+      version = "~> 4.52.5"
     }
   }
 }
