@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "baseUrl": ".",
     "isolatedModules": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "lib": ["esnext", "dom"],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "~/*": ["./src/*"]
     },
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": ["@solidjs/start/env"]
   }
 }

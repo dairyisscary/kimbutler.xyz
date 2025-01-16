@@ -28,8 +28,8 @@ def get_tf_output [] {
 
 def upload_assets [tf_output] {
   print 'Uploading assets to S3'
-  let dist_path = ($env.XYZ_ROOT | path join domains/grace/dist)
-  let bucket_name = $tf_output.grace_static_bucket_name.value
+  let dist_path = ($env.XYZ_ROOT | path join domains/grace/.output/public)
+  let s3_uri_root = $'s3://($tf_output.grace_static_bucket_name.value)'
 
   # HTML and Page Data that can't be (browser) cached
   let page_uploads = (
@@ -37,14 +37,14 @@ def upload_assets [tf_output] {
       --cache-control $'public, max-age=($FIVE_MINUTES), s-maxage=($ONE_YEAR), must-revalidate'
       --exclude '*' --include '*.html'
       --content-type 'text/html; charset=utf-8'
-      $dist_path $'s3://($bucket_name)'
+      $dist_path $s3_uri_root
   ) | lines
 
   # Static assets and JS/CSS that can be cached forever
   let immutable_uploads = (
     ^aws s3 cp --recursive --metadata-directive REPLACE --no-progress
       --cache-control $'public, max-age=($ONE_YEAR), immutable'
-      ($dist_path | path join '_astro') $'s3://($bucket_name)/_astro'
+      ($dist_path | path join '_build') $'($s3_uri_root)/_build'
   ) | lines
 
   print ($page_uploads | append $immutable_uploads)

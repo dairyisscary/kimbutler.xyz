@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply min-h-screen bg-gray-600 font-sans text-white;
+    background: radial-gradient(circle, var(--color-gray-500) 0%, var(--color-gray-800) 100%);
+  }
+}
+
+@layer components {
+  .prose-content {
+    a {
+      @apply border-b border-dotted border-white transition-colors hover:border-transparent;
+    }
+    h2,
+    h3 {
+      @apply mb-4 text-pretty;
+    }
+
+    h2 {
+      @apply text-xl;
+    }
+
+    h3 {
+      @apply text-lg;
+    }
+
+    p {
+      @apply mb-8 leading-7 text-pretty;
+    }
+
+    ul {
+      @apply list-disc;
+    }
+
+    ol {
+      @apply list-decimal;
+    }
+
+    ul,
+    ol {
+      @apply mb-8 space-y-2 pl-10;
+    }
+
+    ul li,
+    ol li {
+      @apply pl-2;
+    }
+
+    p + ul,
+    p + ol {
+      @apply -mt-4;
+    }
+  }
+}

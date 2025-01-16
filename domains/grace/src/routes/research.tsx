@@ -1,0 +1,53 @@
+import { Content } from "~/layouts";
+import { Title } from "~/meta";
+
+export default function Research() {
+  return (
+    <Content title="Research">
+      <Title>Research</Title>
+      <p>
+        Drawing on ethnographic and archival research in the US and Italy, my current book project,{" "}
+        <span class="italic">
+          Re-enchanting the Past: Technoscience and the Conservation of Art and Heritage
+        </span>
+        , examines the latest technoscientific projects for the restoration of art and cultural
+        heritage. I am interested in how physicists, chemists, and biologists can bring their varied
+        perspectives on nature to bear on what the "original" or "authentic" should look like. At
+        stake are the tools and values that can verify the authenticity of an aesthetic and
+        historical artifact and settle the question of who may intervene in its care.
+      </p>
+      <p>
+        Scientists today use their laboratory expertise to transform objects that have canonically
+        been the domain of history and aesthetics into objects of technoscience. I show how they
+        contribute to enduring ethical debates within art history and heritage preservation, having
+        to do with interpreting an artist's intent and an object’s historicity or pristineness.
+      </p>
+      <p>My case studies include:</p>
+      <ol>
+        <li>
+          The use of digital light projection to restore faded paintings by Mark Rothko at the
+          Harvard Art Museums;
+        </li>
+        <li>
+          The development of nanotechnology by physical chemists in Florence, Italy to restore
+          modern and contemporary art;
+        </li>
+        <li>And, the application of trained bacteria to clean stone monuments in Milan.</li>
+        <li>
+          My last case study in the Vatican Museums analyzes my fieldwork in the Vatican's
+          Ethnological Museum, where conservators, charged with the heritage of "non-Western"
+          cultures, must interpret the figure of "the other."
+        </li>
+      </ol>
+      <h2>
+        <a href="https://www.youtube.com/watch?v=b7dutcA7gb8">TEDx Talk</a>
+      </h2>
+      <p>
+        Here I am speaking at my high school, the North Carolina School of Science and Mathematics,
+        in their TEDx conference. Drawing on the theme, "Growth," I reminisce about my path from an
+        aspiring teen neurobiologist who once poked the neurons of sea slugs to an anthropologist
+        who studies the material practices of cultural memory.
+      </p>
+    </Content>
+  );
+}

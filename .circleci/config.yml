@@ -63,13 +63,8 @@ jobs:
       - checkout_monorepo
       - pnpm_install
       - run:
-          name: Checking Formatting
-          command: pnpm exec prettier --check --ignore-unknown './**/*'
-      - run:
           name: Checking Types
-          command: |
-            pnpm exec astro check
-            pnpm exec tsc
+          command: pnpm exec tsc
 
   build_grace_static_html:
     executor: default_grace_node_env
