@@ -15,7 +15,7 @@ commands:
           command: |
             curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
             chmod +x install-opentofu.sh
-            OPENTOFU_VERSION=1.11.4 ./install-opentofu.sh --install-method deb
+            OPENTOFU_VERSION=1.11.8 ./install-opentofu.sh --install-method deb
             rm install-opentofu.sh
 
   pnpm_install:

@@ -9,6 +9,7 @@ flake.lib.mkMinimalShell pkgs {
 
   packages = [
     pkgs.opentofu
+    pkgs.awscli2
     (pkgs.writeScriptBin "deploy-production" ("#!${pkgs.nushell}/bin/nu\n\n" + builtins.readFile ../bin/deploy-production.nu))
   ];
 
