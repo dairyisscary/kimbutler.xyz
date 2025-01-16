@@ -1,4 +1,4 @@
-resource "cloudflare_record" "proton_spf" {
+resource "cloudflare_dns_record" "proton_spf" {
   zone_id = cloudflare_zone.root.id
   type    = "TXT"
   name    = "@"
@@ -6,7 +6,7 @@ resource "cloudflare_record" "proton_spf" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "proton_domain_verification" {
+resource "cloudflare_dns_record" "proton_domain_verification" {
   zone_id = cloudflare_zone.root.id
   type    = "TXT"
   name    = "@"
@@ -14,7 +14,7 @@ resource "cloudflare_record" "proton_domain_verification" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "dmarc" {
+resource "cloudflare_dns_record" "dmarc" {
   zone_id = cloudflare_zone.root.id
   type    = "TXT"
   name    = "_dmarc"
@@ -22,7 +22,7 @@ resource "cloudflare_record" "dmarc" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "proton_mx_1" {
+resource "cloudflare_dns_record" "proton_mx_1" {
   zone_id  = cloudflare_zone.root.id
   type     = "MX"
   priority = 10
@@ -31,7 +31,7 @@ resource "cloudflare_record" "proton_mx_1" {
   ttl      = 1
 }
 
-resource "cloudflare_record" "proton_mx_2" {
+resource "cloudflare_dns_record" "proton_mx_2" {
   zone_id  = cloudflare_zone.root.id
   type     = "MX"
   priority = 20
@@ -40,31 +40,31 @@ resource "cloudflare_record" "proton_mx_2" {
   ttl      = 1
 }
 
-resource "cloudflare_record" "proton_dkim_1" {
+resource "cloudflare_dns_record" "proton_dkim_1" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "protonmail._domainkey"
-  content = "protonmail.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
+  content = "protonmail.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch"
   ttl     = 1
 }
 
-resource "cloudflare_record" "proton_dkim_2" {
+resource "cloudflare_dns_record" "proton_dkim_2" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "protonmail2._domainkey"
-  content = "protonmail2.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
+  content = "protonmail2.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch"
   ttl     = 1
 }
 
-resource "cloudflare_record" "proton_dkim_3" {
+resource "cloudflare_dns_record" "proton_dkim_3" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "protonmail3._domainkey"
-  content = "protonmail3.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
+  content = "protonmail3.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch"
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_dkim_1" {
+resource "cloudflare_dns_record" "aws_ses_dkim_1" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "z3i3pfmu2dtqouuammskg26x7dmtvwg2._domainkey.kimbutler.xyz"
@@ -72,7 +72,7 @@ resource "cloudflare_record" "aws_ses_dkim_1" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_dkim_2" {
+resource "cloudflare_dns_record" "aws_ses_dkim_2" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "xcflhuf6od73o7exz4rr5dcnbfrkyeji._domainkey.kimbutler.xyz"
@@ -80,7 +80,7 @@ resource "cloudflare_record" "aws_ses_dkim_2" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_dkim_3" {
+resource "cloudflare_dns_record" "aws_ses_dkim_3" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "c2kpj7rmffsop7u7pz5nmdprejc4nn6k._domainkey.kimbutler.xyz"
@@ -88,7 +88,7 @@ resource "cloudflare_record" "aws_ses_dkim_3" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_home_dkim_1" {
+resource "cloudflare_dns_record" "aws_ses_home_dkim_1" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "f45iq4empt6l4pbhsn3y7qsudbxm2wyn._domainkey.home.kimbutler.xyz"
@@ -96,7 +96,7 @@ resource "cloudflare_record" "aws_ses_home_dkim_1" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_home_dkim_2" {
+resource "cloudflare_dns_record" "aws_ses_home_dkim_2" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "2gmhp2fdzrhb7ykkxxb4gad46de22q6g._domainkey.home.kimbutler.xyz"
@@ -104,7 +104,7 @@ resource "cloudflare_record" "aws_ses_home_dkim_2" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "aws_ses_home_dkim_3" {
+resource "cloudflare_dns_record" "aws_ses_home_dkim_3" {
   zone_id = cloudflare_zone.root.id
   type    = "CNAME"
   name    = "xhdln6bsdm5rcln5a5c5t3imn2znovbk._domainkey.home.kimbutler.xyz"

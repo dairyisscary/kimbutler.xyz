@@ -15,7 +15,7 @@ terraform {
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.52.5"
+      version = "~> 5.16.0"
     }
   }
 }
@@ -42,8 +42,10 @@ variable "cloudflare_theater_tunnel_password_file" {
 }
 
 resource "cloudflare_zone" "root" {
-  account_id = local.cloudflare_account_id
-  zone       = local.root_domain
+  account = {
+    id = local.cloudflare_account_id
+  }
+  name = local.root_domain
 }
 
 module "grace" {

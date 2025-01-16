@@ -9,7 +9,7 @@ terraform {
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.52.5"
+      version = "~> 5.16.0"
     }
   }
 }
@@ -91,7 +91,7 @@ output "static_bucket_name" {
   value = aws_s3_bucket.website_bucket.bucket
 }
 
-resource "cloudflare_record" "grace" {
+resource "cloudflare_dns_record" "grace" {
   zone_id = var.root_cloudflare_zone_id
   type    = "CNAME"
   name    = "grace"
@@ -101,13 +101,13 @@ resource "cloudflare_record" "grace" {
 }
 
 resource "cloudflare_workers_script" "api" {
-  account_id = var.root_cloudflare_account_id
-  name       = "api"
-  content    = file("${path.module}/../src/api/v1.mjs")
+  account_id  = var.root_cloudflare_account_id
+  script_name = "api"
+  content     = file("${path.module}/../src/api/v1.mjs")
 }
 
 resource "cloudflare_workers_route" "api" {
-  zone_id     = var.root_cloudflare_zone_id
-  pattern     = "grace.${var.root_domain}/api/v1/*"
-  script_name = cloudflare_workers_script.api.name
+  zone_id = var.root_cloudflare_zone_id
+  pattern = "grace.${var.root_domain}/api/v1/*"
+  script  = cloudflare_workers_script.api.script_name
 }
