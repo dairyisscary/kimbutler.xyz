@@ -9,6 +9,7 @@ resource "cloudflare_record" "theater_argo" {
   name    = local.public_subdomain
   content = "${cloudflare_zero_trust_tunnel_cloudflared.theater.id}.cfargotunnel.com"
   proxied = true
+  ttl     = 1
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared" "theater" {

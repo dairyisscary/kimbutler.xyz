@@ -97,6 +97,7 @@ resource "cloudflare_record" "grace" {
   name    = "grace"
   content = aws_s3_bucket_website_configuration.website_bucket_website.website_endpoint
   proxied = true
+  ttl     = 1
 }
 
 resource "cloudflare_workers_script" "api" {
