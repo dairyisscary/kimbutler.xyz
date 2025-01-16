@@ -99,15 +99,3 @@ resource "cloudflare_dns_record" "grace" {
   proxied = true
   ttl     = 1
 }
-
-resource "cloudflare_workers_script" "api" {
-  account_id  = var.root_cloudflare_account_id
-  script_name = "api"
-  content     = file("${path.module}/../src/api/v1.mjs")
-}
-
-resource "cloudflare_workers_route" "api" {
-  zone_id = var.root_cloudflare_zone_id
-  pattern = "grace.${var.root_domain}/api/v1/*"
-  script  = cloudflare_workers_script.api.script_name
-}
