@@ -24,7 +24,7 @@ commands:
       - run:
           name: Installing PNPM
           command: |
-            sudo npm install -g pnpm@9.15.3
+            sudo npm install -g pnpm@11.1.2
             pnpm config set store-dir /home/circleci/.pnpm-store
       - run:
           name: Installing NPM Deps
@@ -39,12 +39,12 @@ commands:
 executors:
   default_grace_node_env:
     docker:
-      - image: cimg/node:22.22.0
+      - image: cimg/node:24.15.0
     working_directory: /home/circleci/kimbutler.xyz/domains/grace
 
   default_tofu_env:
     docker:
-      - image: cimg/base:2026.02
+      - image: cimg/base:2026.04
     working_directory: /home/circleci/kimbutler.xyz
 
 jobs:

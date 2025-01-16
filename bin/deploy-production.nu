@@ -5,8 +5,8 @@ def build_assets [] {
   print 'Building assets'
   cd ($env.XYZ_ROOT | path join domains/grace)
   rm -rf dist
-  ^nix develop '.#grace' --no-pure-eval --command pnpm install --frozen-lockfile
-  ^nix develop '.#grace' --no-pure-eval --command pnpm build
+  ^nix develop '.#grace' --command pnpm install --frozen-lockfile
+  ^nix develop '.#grace' --command pnpm build
   cd -
 }
 
