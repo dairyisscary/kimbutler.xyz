@@ -37,6 +37,10 @@ variable "cloudflare_api_token_file" {
   type = string
 }
 
+variable "cloudflare_theater_tunnel_password_file" {
+  type = string
+}
+
 resource "cloudflare_zone" "root" {
   account_id = local.cloudflare_account_id
   zone       = local.root_domain
