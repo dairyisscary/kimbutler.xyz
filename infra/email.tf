@@ -1,31 +1,59 @@
-resource "cloudflare_record" "hey_root_spam_protection" {
+resource "cloudflare_record" "proton_spf" {
   zone_id = cloudflare_zone.root.id
   type    = "TXT"
   name    = "@"
-  content = "v=spf1 include:_spf.hey.com ~all"
+  content = "\"v=spf1 include:_spf.protonmail.ch ~all\""
 }
 
-resource "cloudflare_record" "hey_dmarc_spam_protection" {
+resource "cloudflare_record" "proton_domain_verification" {
+  zone_id = cloudflare_zone.root.id
+  type    = "TXT"
+  name    = "@"
+  content = "\"protonmail-verification=4cd658d2f92447461ba677b6c46bd571bac5fd31\""
+}
+
+resource "cloudflare_record" "dmarc" {
   zone_id = cloudflare_zone.root.id
   type    = "TXT"
   name    = "_dmarc"
-  content = "v=DMARC1; p=none;"
+  content = "\"v=DMARC1; p=quarantine\""
 }
 
-resource "cloudflare_record" "hey_cname_email_auth" {
-  zone_id = cloudflare_zone.root.id
-  type    = "CNAME"
-  name    = "heymail._domainkey"
-  content = "heymail._domainkey.hey.com"
-}
-
-resource "cloudflare_record" "hey_mx_email" {
+resource "cloudflare_record" "proton_mx_1" {
   zone_id  = cloudflare_zone.root.id
   type     = "MX"
-  ttl      = 3600
   priority = 10
   name     = "@"
-  content  = "work-mx.app.hey.com"
+  content  = "mail.protonmail.ch"
+}
+
+resource "cloudflare_record" "proton_mx_2" {
+  zone_id  = cloudflare_zone.root.id
+  type     = "MX"
+  priority = 20
+  name     = "@"
+  content  = "mailsec.protonmail.ch"
+}
+
+resource "cloudflare_record" "proton_dkim_1" {
+  zone_id = cloudflare_zone.root.id
+  type    = "CNAME"
+  name    = "protonmail._domainkey"
+  content = "protonmail.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
+}
+
+resource "cloudflare_record" "proton_dkim_2" {
+  zone_id = cloudflare_zone.root.id
+  type    = "CNAME"
+  name    = "protonmail2._domainkey"
+  content = "protonmail2.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
+}
+
+resource "cloudflare_record" "proton_dkim_3" {
+  zone_id = cloudflare_zone.root.id
+  type    = "CNAME"
+  name    = "protonmail3._domainkey"
+  content = "protonmail3.domainkey.dr77dzstzp446wahdgh63nu5d5tkgjgtz2h3k4jmtkezns6fzsqga.domains.proton.ch."
 }
 
 resource "cloudflare_record" "aws_ses_dkim_1" {
