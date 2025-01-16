@@ -94,16 +94,3 @@ resource "cloudflare_ruleset" "public_plex_waf_settings" {
     action = "block"
   }]
 }
-
-resource "cloudflare_notification_policy" "theater_tunnel_health" {
-  account_id = cloudflare_zone.root.account.id
-  name       = "Notifiy Tunnel Health Change"
-  enabled    = true
-  alert_type = "tunnel_health_event"
-
-  mechanisms = {
-    email = [{
-      id = "eric@kimbutler.xyz"
-    }]
-  }
-}
