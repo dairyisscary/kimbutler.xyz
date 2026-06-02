@@ -10,7 +10,12 @@ export default defineConfig(({ mode }) => ({
       solid: { solid: { hydratable: mode !== "production" } },
     }),
     nitro({
-      prerender: { crawlLinks: true, routes: ["/", "/404"] },
+      prerender: {
+        crawlLinks: true,
+        routes: ["/", "/404"],
+        // ignore the mailto: entity link
+        ignore: ["/&"],
+      },
     }),
     tailwindcss(),
   ],

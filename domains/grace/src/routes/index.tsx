@@ -1,21 +1,21 @@
 import { A } from "@solidjs/router";
 import type { JSX } from "solid-js";
+import { ssr } from "solid-js/web";
 
 import Avatar from "~/assets/avatar.png";
 import Avatar2x from "~/assets/avatar@2x.png";
 import { WithFooter } from "~/layouts";
 import { Title } from "~/meta";
 
-function NavA(props: { href: string; children: JSX.Element }) {
-  return (
-    <A
-      class="flex h-10 flex-1 items-center justify-center px-6 py-3 text-sm tracking-widest uppercase hover:bg-white/10"
-      href={props.href}
-    >
-      {props.children}
-    </A>
-  );
-}
+const LINK_CLX =
+  "flex h-10 flex-1 items-center justify-center px-6 py-3 text-sm tracking-widest uppercase hover:bg-white/10";
+
+const CONTACT_HREF = ["mailto:", "website", ".", "unfailing353", "@", "passmail.net"]
+  .flatMap((section) => section.split("").map((c) => `&#${c.charCodeAt(0)};`))
+  .join("");
+const CONTACT_LINK = ssr(
+  `<a class="${LINK_CLX}" href="${CONTACT_HREF}">Contact</a>`,
+) as unknown as JSX.Element;
 
 function Line() {
   return <div aria-hidden="true" class="h-12 w-px bg-white" />;
@@ -44,9 +44,16 @@ export default function Home() {
       </div>
       <Line />
       <nav class="mx-8 flex flex-col rounded border border-white sm:flex-row">
-        <NavA href="/about/">About</NavA>
-        <NavA href="/research/">Research</NavA>
-        <NavA href="/writing/">Writing</NavA>
+        <A class={LINK_CLX} href="/about/">
+          About
+        </A>
+        <A class={LINK_CLX} href="/research/">
+          Research
+        </A>
+        <A class={LINK_CLX} href="/writing/">
+          Writing
+        </A>
+        {CONTACT_LINK}
       </nav>
     </WithFooter>
   );
