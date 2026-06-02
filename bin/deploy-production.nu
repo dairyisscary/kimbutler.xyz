@@ -1,9 +1,17 @@
 const ONE_YEAR = 31536000
 const FIVE_MINUTES = 300
 
+def "path grace" [] {
+  $env.XYZ_ROOT | path join domains/grace
+}
+
+def "path infra" [] {
+  $env.XYZ_ROOT | path join infra
+}
+
 def build_assets [] {
   print 'Building assets'
-  cd ($env.XYZ_ROOT | path join domains/grace)
+  cd (path grace)
   rm -rf dist
   ^nix develop '.#grace' --command pnpm install --frozen-lockfile
   ^nix develop '.#grace' --command pnpm build
@@ -12,7 +20,7 @@ def build_assets [] {
 
 def provision_infrastructure [] {
   print 'Forming infrastructure'
-  cd ($env.XYZ_ROOT | path join infra)
+  cd (path infra)
   ^tofu init
   ^tofu apply
   cd -
@@ -20,7 +28,7 @@ def provision_infrastructure [] {
 
 def get_tf_output [] {
   print 'Getting TF output'
-  cd ($env.XYZ_ROOT | path join infra)
+  cd (path infra)
   let output = ^tofu output -json | from json
   cd -
   $output
@@ -28,16 +36,28 @@ def get_tf_output [] {
 
 def upload_assets [tf_output] {
   print 'Uploading assets to S3'
-  let dist_path = ($env.XYZ_ROOT | path join domains/grace/.output/public)
+
+  let dist_path = path grace | path join .output/public
+  let public_path = path grace | path join public
+
   let s3_uri_root = $'s3://($tf_output.grace_static_bucket_name.value)'
 
-  # HTML and Page Data that can't be (browser) cached
+  let short_lived_cache_control = $'public, max-age=($FIVE_MINUTES), s-maxage=($ONE_YEAR), must-revalidate'
+
+  # HTML with a short-lived cache
   let page_uploads = (
     ^aws s3 cp --recursive --metadata-directive REPLACE --no-progress
-      --cache-control $'public, max-age=($FIVE_MINUTES), s-maxage=($ONE_YEAR), must-revalidate'
+      --cache-control $short_lived_cache_control
       --exclude '*' --include '*.html'
       --content-type 'text/html; charset=utf-8'
       $dist_path $s3_uri_root
+  ) | lines
+
+  # "Public" files with short-lived cache
+  let public_uploads = (
+    ^aws s3 cp --recursive --metadata-directive REPLACE --no-progress
+      --cache-control $short_lived_cache_control
+      $public_path $s3_uri_root
   ) | lines
 
   # Static assets and JS/CSS that can be cached forever
@@ -47,7 +67,7 @@ def upload_assets [tf_output] {
       ($dist_path | path join '_build') $'($s3_uri_root)/_build'
   ) | lines
 
-  print ($page_uploads | append $immutable_uploads)
+  print ($page_uploads | append $immutable_uploads | append $public_uploads)
 }
 
 def purge_cdn [tf_output] {
