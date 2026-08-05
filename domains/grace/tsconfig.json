@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "allowJs": false,
-    "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "lib": ["esnext", "dom"],
     "module": "preserve",
+    "moduleDetection": "force",
     "moduleResolution": "bundler",
     "noEmit": true,
     "paths": {

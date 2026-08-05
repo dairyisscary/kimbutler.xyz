@@ -7,7 +7,7 @@ flake.lib.mkMinimalShell pkgs {
   name = "grace-kimbutler-xyz-devshell";
 
   packages = [
-    nodejs
+    nodejs.out
     pnpm
     flake.formatter.${pkgs.stdenv.system}.passthru.formatters.oxfmt
   ];
