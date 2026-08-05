@@ -4,6 +4,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 
 import "~/assets/favicon.png"; // Be sure to "include" this in the client build so vite outputs it
+
 import "~/app.css";
 
 export default function App() {

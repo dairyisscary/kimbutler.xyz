@@ -1,7 +1,5 @@
 {
   "proseWrap": "always",
-  "sortImports": {
-    "internalPattern": ["~/"]
-  },
+  "sortImports": {},
   "sortTailwindcss": {}
 }

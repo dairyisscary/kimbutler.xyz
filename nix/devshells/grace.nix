@@ -1,7 +1,7 @@
 { flake, pkgs, ... }:
 let
-  nodejs = pkgs.nodejs_24;
-  pnpm = pkgs.pnpm_11.override { inherit nodejs; };
+  nodejs = pkgs.nodejs-slim_24;
+  pnpm = pkgs.pnpm_11.override { nodejs-slim = nodejs; };
 in
 flake.lib.mkMinimalShell pkgs {
   name = "grace-kimbutler-xyz-devshell";
@@ -9,7 +9,6 @@ flake.lib.mkMinimalShell pkgs {
   packages = [
     nodejs
     pnpm
-    (pkgs.typescript-language-server.override { inherit nodejs; })
     flake.formatter.${pkgs.stdenv.system}.passthru.formatters.oxfmt
   ];
 }
