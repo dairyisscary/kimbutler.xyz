@@ -6,8 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig(({ mode }) => ({
   plugins: [
     solidStart({
-      // We're SSG only with no scripts/hydration
-      solid: { solid: { hydratable: mode !== "production" } },
+      middleware: mode === "production" ? import.meta.resolve("./src/middleware.ts") : undefined,
     }),
     nitro({
       prerender: {
